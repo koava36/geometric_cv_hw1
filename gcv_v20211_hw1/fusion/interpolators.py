@@ -29,7 +29,7 @@ def get_view(
     #  Hints: use the class `RaycastingImaging` to transform image to  points in camera frame,
     #  use the class `CameraPose` to transform image to points in world frame.
     pose_i = CameraPose(extrinsics[i])
-    imaging_i = RaycastingImaging(resolution_image=intrinsics_dict[i]['resolution_image'], 					 resolution_3d=intrinsics_dict[i]['resolution_3d'])
+    imaging_i = RaycastingImaging(resolution_image=intrinsics_dict[i]['resolution_image'], resolution_3d=intrinsics_dict[i]['resolution_3d'])
     points_i = pose_i.camera_to_world(imaging_i.image_to_points(image_i))
 
     return image_i, distances_i, points_i, pose_i, imaging_i
@@ -114,8 +114,7 @@ def pairwise_interpolate_predictions(
                 #  to construct a bilinear interpolator from distances predicted
                 #  in `view_i` (i.e. `distances_i`) into the point in `view_j`.
                 #  Use the interpolator to compute an interpolated distance value.
-                interpolator = interpolate.interp2d(point_from_j_nns[:, 0], 							    point_from_j_nns[:, 1],
-						    distances_i.flatten()[point_nn_indexes])
+                interpolator = interpolate.interp2d(point_from_j_nns[:, 0], point_from_j_nns[:, 1], distances_i.flatten()[point_nn_indexes])
                 distances_j_interp[idx] = interpolator(point_from_j[0], point_from_j[1])
 
             except ValueError as e:
